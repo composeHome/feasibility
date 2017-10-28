@@ -77,7 +77,7 @@ costs:
             # guestimate
             price_per_unit: 40
             units: 40
-            unit: days
+            unit_label: days
         land_clearing:
             # guestimate
             price: 700

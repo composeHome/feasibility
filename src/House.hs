@@ -32,12 +32,13 @@ data Cost = FixedCost         Name Price
 
 
 getHouseProperty :: Unit -> (House -> Double)
-getHouseProperty string
-      | string == Unit "bedrooms"  = bedrooms
-      | string == Unit "bathrooms" = bathrooms 
-      | string == Unit "land_area" = land_area
-      | string == Unit "rooms"     = rooms
-      | otherwise                  = area
+getHouseProperty (Unit string)
+      | string == "bedrooms"  = bedrooms
+      | string == "bathrooms" = bathrooms 
+      | string == "land_area" = land_area
+      | string == "rooms"     = rooms
+      | string == "area"      = area
+      | otherwise             = fail $ "house property '" ++ string ++ "' does not exist"
 
 
 parseCost :: String -> Value -> Parser Cost 
