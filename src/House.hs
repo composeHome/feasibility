@@ -4,11 +4,11 @@
 
 module House 
     ( House(..) 
-    , getHouseProperty
-    , HomeAdvisorId
-    , Price(..)
     , Cost(..)
+    , Price(..)
     , Subcosts(..)
+    , Units(..)
+    , getHouseProperty
     ) where
 
 import Data.Yaml
@@ -16,45 +16,49 @@ import Data.Text (unpack)
 import Data.Traversable
 import Control.Applicative
 import qualified Data.HashMap.Strict as HM
+-- import Debug.Trace
 
 newtype Name           = Name String          deriving Show
-newtype Price          = Price Int            deriving Show
+newtype Price          = Price Double         deriving Show
 newtype Unit           = Unit String          deriving (Show, Eq)
+newtype Units          = Units Double         deriving (Show, Eq)
 newtype Subcosts       = Subcosts [Cost]      deriving Show
-newtype HomeAdvisorId  = HomeAdvisorId String deriving Show
 
-data Cost = FixedCost       Name Price
-          | VariableCost    Name Price Unit
-          | EstimateCost    Name HomeAdvisorId
-          | Category        Name Subcosts
+data Cost = FixedCost         Name Price
+          | VariableCostRef   Name Price Unit
+          | VariableCost      Name Price Units
+          | Category          Name Subcosts
             deriving Show
 
 
-getHouseProperty :: Unit -> (House -> Int)
+getHouseProperty :: Unit -> (House -> Double)
 getHouseProperty string
       | string == Unit "bedrooms"  = bedrooms
       | string == Unit "bathrooms" = bathrooms 
       | string == Unit "land_area" = land_area
-      | otherwise             = area
+      | string == Unit "rooms"     = rooms
+      | otherwise                  = area
 
 
 parseCost :: String -> Value -> Parser Cost 
+-- parseCost o | trace ("parse cost" ++ show o) False = undefined
 parseCost name =
   withObject "cost" $ \o -> do
     mprice <- o .:? "price"
     munitPrice <- o .:? "price_per_unit"
     munit <- o  .:? "unit"
-    mhomeAdId <- o .:? "home_advisor_id"
+    munits <- o  .:? "units"
     mcosts <- optional (parseCosts o)
-    case (mprice, munitPrice, munit, mcosts, mhomeAdId) of
-      (_, Just unitPrice, Just unit, _, _) -> return $ VariableCost (Name name) (Price unitPrice) (Unit unit)
-      (Just price, _, _, _, _)             -> return $ FixedCost (Name name) (Price price)
-      (_, _, _, _, Just homeAdId)          -> return $ EstimateCost (Name name) (HomeAdvisorId homeAdId)
-      (_, _, _, Just costs', _)            -> return $ Category (Name name) (Subcosts costs')
-      _                                    -> fail $ "could not parse cost for " ++ name
+    case (mprice, munitPrice, munit, munits, mcosts) of
+      (_, Just unitPrice, Just unit, _, _)  -> return $ VariableCostRef (Name name) (Price unitPrice) (Unit unit)
+      (_, Just unitPrice, _, Just units, _) -> return $ VariableCost (Name name) (Price unitPrice) (Units units)
+      (Just price, _, _, _, _)              -> return $ FixedCost (Name name) (Price price)
+      (_, _, _, _, Just costs')             -> return $ Category (Name name) (Subcosts costs')
+      v                                     -> fail $ "could not parse cost for " ++ name ++ show v
 
 
 parseCosts :: Object -> Parser [Cost]
+-- parseCosts o | trace ("parse costs" ++ show o) False = undefined
 parseCosts o = 
   for (HM.toList o) $ \(name, v) ->
     parseCost (unpack name) v
@@ -71,11 +75,12 @@ parseCostsField o = case HM.lookup "costs" o of
 data House = House {
   client               :: String, 
   address              :: String,
-  zipcode              :: String,
-  area                 :: Int,
-  land_area            :: Int,
-  bedrooms             :: Int,
-  bathrooms            :: Int,
+  zipcode              :: Double,
+  area                 :: Double,
+  land_area            :: Double,
+  bedrooms             :: Double,
+  bathrooms            :: Double,
+  rooms                :: Double,
   comparable_zillow_id :: String,
   costs                :: [Cost]
 } deriving Show
@@ -90,6 +95,7 @@ instance FromJSON House where
     v .: "land_area" <*> 
     v .: "bedrooms" <*> 
     v .: "bathrooms" <*> 
+    v .: "rooms" <*>
     v .: "comparable_zillow_id" <*>
     parseCostsField v
   parseJSON _ = fail "Expected Object for House value"

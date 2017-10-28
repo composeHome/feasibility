@@ -4,7 +4,7 @@ zipcode: 83716
 area: 2300
 land_area: 40
 bedrooms: 3
-bathrooms: 3.5
+bathrooms: 3
 kitchens: 1
 living_rooms: 1
 family_room: 1
@@ -87,7 +87,7 @@ costs:
             seller: https://www.nahb.org/en/research/housing-economics/special-studies/archives/new-construction-cost-breakdown-2011.aspx
         driveway:
             price_per_unit: 3
-            units: 100
+            unit: 100
             unit_label: ft
             seller: http://driveways.promatcher.com/cost/idaho.aspx
         landscaping:
@@ -95,7 +95,7 @@ costs:
             seller: https://www.homeadvisor.com/cost/landscape/install-landscaping/
     sewer:
         percolation_test:
-            price: 1200
+            cost: 1200
         septic_permit_fee:
             price: 769
             seller: Boise County
@@ -188,9 +188,23 @@ costs:
             tv:
                 price: 300
                 seller: Amazon
+
     heating_ventilation_airconditioning:
-        price: 8760
-        seller: https://www.nahb.org/en/research/housing-economics/special-studies/archives/new-construction-cost-breakdown-2011.aspx
+        total:
+            price: 8760
+            seller: https://www.nahb.org/en/research/housing-economics/special-studies/archives/new-construction-cost-breakdown-2011.aspx
+        ductwork:
+            price_per_unit: 0
+            unit: area
+        fireplace:
+            # $1500 estimate
+            price_per_unit: 0
+            units: 1
+        tankless_water_heater:
+            # $3000 estimate
+            price_per_unit: 0
+            unit: 1
+            seller: Build.com
     structure:
         # price is TBD
         delivery:
