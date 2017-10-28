@@ -1,0 +1,100 @@
+client: Mel van Londen and Tiffany Symmes
+address: 1 New Road Way
+zipcode: 83716
+area: 2300
+land_area: 40
+bedrooms: 4
+bathrooms: 2
+comparable_zillow_id: asdf
+costs:
+  site:
+    geotechnical_report:
+        price_per_unit: 7
+        unit: land_area
+    land_clearing:
+        price: 20
+            # seller: jane
+  great:
+    geotechnical_report:
+        price_per_unit: 7
+        unit: land_area
+    land_clearing:
+        price: 20
+            # seller: jane
+
+# costs:
+#     admin:
+#         building_permit:
+#         impact_fees:
+#         home_inspection_fees: 800
+#         electrical_permit:
+#         mechanical_permit:
+#         wildland_urban_interface_fee: 50
+#         address_assignment: 6
+#         gps_911_fee: 50
+#         well_permit:
+#         legal:
+#         financing_costs:   
+#     site:
+#         geotechnical_report:
+#             price_per_unit: 7
+#             unit: land_area
+#         engineering:
+#         general_contractor:
+#         land_clearing:
+#             price_per_unit: 20
+#             unit: area
+#         excavation_earthwork:
+#         foundation:
+#             home_advisor_id: 83
+#         driveway:
+#             price_per_unit: 2
+#             units: 20
+#             unit_label: ft
+#         roads:
+#             price_per_unit: 2
+#             units: 20
+#             unit_label: ft
+#         walkways:
+#             price_per_unit: 2
+#             units: 20
+#             unit_label: ft
+#         landscaping:
+#             home_advisor_id:
+#     sewer:
+#         percolation_test:
+#         septic_permit_fee:
+#         septic_system_installation:
+#             base_price: 2000
+#             price_per_unit: 20
+#             unit: bedrooms
+#         septic_system_inspection_fee:
+#     water:
+#         well_permit_fee:
+#         well_installation:
+#             depth_of_well:
+#         well_pump:
+#             distance_to_house:
+#         well_inspection_fee:
+#     gas:
+#         propane_tank_installation:
+#             size_of_tank:
+#             above_or_underground:  
+#     structure:
+#         kit_home_package: 
+#             price: 165000
+#             seller: Jorntra
+#             includes:
+#               - subfloor
+#               - finish_flooring
+#               - exterior_walls
+#               - interior_framing 
+#               - roof_structure
+#               - insulation
+#               - weatherproofing
+#     electric:
+#         price_per_unit: 20
+#         unit: area
+#     mechanical:
+        
+#     plumbing:
